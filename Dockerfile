@@ -31,8 +31,6 @@ RUN apt-get update && apt-get install -y apt-transport-https && rm -rf /var/lib/
 ENV ELASTICSEARCH_VERSION 2.3.3
 ENV ELASTICSEARCH_DEB_VERSION 2.3.3
 
-# don't allow the package to install its sysctl file (causes the install to fail)
-# Failed to write '262144' to '/proc/sys/vm/max_map_count': Read-only file system
 RUN dpkg-divert --rename /usr/lib/sysctl.d/elasticsearch.conf \
 	&& apt-get update \
 	&& apt-get install -y --no-install-recommends "elasticsearch=$ELASTICSEARCH_DEB_VERSION" \
