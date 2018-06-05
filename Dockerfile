@@ -1,13 +1,10 @@
-FROM debian:jessie
+FROM ubuntu:16.04
 
 ARG DEBIAN_FRONTEND=noninteractive
 
 RUN apt-get update -y
 
-RUN apt-get -y install apt-transport-https lsb-release ca-certificates wget
-RUN wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg
-RUN echo "deb https://packages.sury.org/php/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/php.list
-RUN apt-get update -y
+RUN apt -y install software-properties-common locales && locale-gen en_US.UTF-8 && export LANG=en_US.UTF-8 && add-apt-repository -y ppa:ondrej/php && apt -y update
 
 RUN { \
         echo mysql-community-server mysql-community-server/data-dir select ''; \
@@ -17,7 +14,7 @@ RUN { \
     } | debconf-set-selections \
     && apt-get install -y mysql-server
 
-RUN apt-get install -y php7.1-curl php7.1-cli php7.1-intl php7.1-zip php7.1-dom php7.1-mysqlnd php7.1-gd php7.1-mbstring php7.1-fpm php-memcached memcached ssh curl git openjdk-7-jre
+RUN apt-get install -y php7.1-curl php7.1-cli php7.1-intl php7.1-zip php7.1-dom php7.1-mysqlnd php7.1-gd php7.1-mbstring php7.1-fpm php7.1-bcmath php-memcached memcached ssh curl git openjdk-8-jre
 
 RUN curl -sS https://getcomposer.org/installer | php
 RUN mv composer.phar /usr/local/bin/composer
